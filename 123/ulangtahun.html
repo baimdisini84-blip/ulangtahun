@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>buat bubuu</title>
+  <style>
+    :root{
+      --bg:#ffe6f2;
+      --card:#fff;
+      --accent:#ff7eb9;
+      --muted:#7a5c72;
+      --blue:#ff9ed6;
+    }
+    *{box-sizing:border-box;font-family:Segoe UI,Roboto,Arial,sans-serif}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(180deg,var(--bg),#fff);
+      padding:24px;
+    }
+
+    .card{
+      width:100%;
+      max-width:720px;
+      background:var(--card);
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(255,105,180,0.25);
+      padding:28px;
+      text-align:center;
+      position:relative;
+    }
+    h1{margin:0 0 10px;font-size:28px;color:#d63384}
+    p.lead{color:var(--muted);margin:0 0 22px}
+
+    /* Cake */
+    .cake-wrap{display:flex;justify-content:center;margin-bottom:22px}
+    .cake{width:220px;height:160px;position:relative}
+    .cake .layer{position:absolute;left:50%;transform:translateX(-50%);border-radius:12px}
+    .cake .layer.layer1{bottom:0;width:200px;height:60px;background:#ffc1dc;border:4px solid #ff99c8}
+    .cake .layer.layer2{bottom:44px;width:170px;height:50px;background:#ffd6e8;border:4px solid #ffb3d9}
+    .cake .frosting{bottom:80px;width:150px;height:36px;background:#fff0f5;border-radius:14px}
+    .candle{position:absolute;left:50%;transform:translateX(-50%);top:-12px;display:flex;gap:8px}
+    .candle span{display:block;width:8px;height:28px;background:#ffe2e2;border-radius:4px;box-shadow:inset 0 -4px rgba(0,0,0,0.06)}
+    .candle span:after{content:'';display:block;width:8px;height:10px;background:#ff9ed6;margin-top:-10px;border-radius:50%;filter:blur(0.2px)}
+
+    /* Message */
+    .wish{font-size:18px;margin-bottom:18px;color:#b0316f}
+
+    /* Buttons */
+    .decision{margin-top:10px}
+    .question{margin-bottom:10px;font-weight:600;color:#b0316f}
+    .btn{
+      display:inline-block;
+      padding:10px 20px;
+      border-radius:10px;
+      border:0;
+      cursor:pointer;
+      font-size:16px;
+      margin:0 8px;
+      transition:all .2s ease;
+    }
+    .btn:active{transform:translateY(2px)}
+    .btn:hover{transform:scale(1.05);box-shadow:0 8px 20px rgba(0,0,0,0.15)}
+
+    .btn-yes{background:var(--accent);color:white;box-shadow:0 6px 18px rgba(255,126,185,0.28)}
+    .btn-no{background:#ffe6f0;color:#b0316f}
+    .btn-next{margin-top:20px;background:#ff9ed6;color:white;box-shadow:0 6px 18px rgba(255,158,214,0.28)}
+
+    /* Hover colors */
+    .btn-yes:hover{background:#ff94c2}
+    .btn-no:hover{background:#ffd0e3}
+    .btn-next:hover{background:#ff7ebe}
+
+    /* Feedback text */
+    .result{height:28px;margin-top:12px;color:#b0316f;font-weight:600}
+
+    /* Confetti */
+    .confetti{pointer-events:none;position:absolute;inset:0;overflow:hidden}
+    .confetti i{position:absolute;width:8px;height:12px;background:var(--accent);opacity:0;transform:translateY(-20px) rotate(15deg);animation:fall 1200ms ease-in forwards}
+    @keyframes fall{to{opacity:1;transform:translateY(220px) rotate(200deg);opacity:1}}
+
+    /* responsive */
+    @media (max-width:480px){
+      .cake{width:160px;height:120px}
+      .cake .layer.layer1{width:150px;height:48px}
+      .cake .layer.layer2{width:130px;height:38px}
+      .cake .frosting{width:110px;height:30px}
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Selamat Ulang Tahun 🎀</h1>
+    <p class="lead">Birthday cantikk naa duduu semogaa celaluu bahagiaaa yaaa.</p>
+
+    <div class="cake-wrap" aria-hidden="true">
+      <div class="cake" id="cake">
+        <div class="layer layer1"></div>
+        <div class="layer layer2"></div>
+        <div class="layer frosting"></div>
+        <div class="candle" style="left:50%;top:-8px;">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="wish">Happy Birthday! Semoga semua harapanmu tercapai 💕</div>
+
+    <div class="decision">
+      <div class="question">Kamu sayang aku?</div>
+      <button class="btn btn-yes" id="btnYes">Iya</button>
+      <button class="btn btn-no" id="btnNo">Tidak</button>
+      <div class="result" id="result"></div>
+
+      <a href="pesan.html" class="btn btn-next">sayang dudu ada cecuatu cini pencet</a>
+    </div>
+
+    <div class="confetti" id="confetti"></div>
+  </div>
+
+  <script>
+    const btnYes = document.getElementById('btnYes');
+    const btnNo = document.getElementById('btnNo');
+    const result = document.getElementById('result');
+    const confetti = document.getElementById('confetti');
+
+    function makeConfetti(){
+      confetti.innerHTML = '';
+      const colors = ['#ff7eb9','#ffb3d9','#ff9ed6','#ffc1dc','#ff94c2'];
+      for(let i=0;i<24;i++){
+        const el = document.createElement('i');
+        el.style.left = Math.floor(Math.random()*100)+'%';
+        el.style.background = colors[Math.floor(Math.random()*colors.length)];
+        el.style.animationDelay = Math.floor(Math.random()*400)+'ms';
+        el.style.transform = 'translateY(-30px) rotate('+Math.floor(Math.random()*360)+'deg)';
+        confetti.appendChild(el);
+      }
+      setTimeout(()=> confetti.innerHTML='',1400);
+    }
+
+    btnYes.addEventListener('click',()=>{
+      result.textContent = 'Makasih! Aku juga sayang kamu 💖';
+      makeConfetti();
+      const cake = document.getElementById('cake');
+      cake.animate([{transform:'translateY(0)'},{transform:'translateY(-8px)'},{transform:'translateY(0)'}],{duration:500,easing:'ease-out'});
+    });
+
+    btnNo.addEventListener('click',()=>{
+      result.textContent = 'Eummm bubuu tidakk sayanggg duduu nihhh 😭🥺💔';
+      btnNo.animate([{transform:'translateX(0)'},{transform:'translateX(-8px)'},{transform:'translateX(8px)'},{transform:'translateX(0)'}],{duration:400});
+    });
+  </script>
+</body>
+</html>
